@@ -13,13 +13,23 @@ import javax.swing.JOptionPane;
  *
  * @author jronc
  */
-public class CostumerTemplate extends javax.swing.JFrame {
+public class CostumerDataRequest extends javax.swing.JFrame {
 
     /**
-     * Creates new form CostumerTemplate
+     * Creates new form CostumerDataRequest
      */
-    public CostumerTemplate() {
+    boolean editing;
+    boolean onStore;
+
+    public CostumerDataRequest(boolean onStore, boolean editing) {
         initComponents();
+        BtnRegisterEdit.setText("Editar");
+        this.onStore = onStore;
+        if (!onStore) {
+            this.editing = false;
+        } else {
+            this.editing = editing;
+        }
     }
 
     /**
@@ -32,7 +42,7 @@ public class CostumerTemplate extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        BtnRegister = new javax.swing.JButton();
+        BtnRegisterEdit = new javax.swing.JButton();
         BtnCancel = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         txtFldName = new javax.swing.JTextField();
@@ -47,10 +57,10 @@ public class CostumerTemplate extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        BtnRegister.setText("Registrar");
-        BtnRegister.addActionListener(new java.awt.event.ActionListener() {
+        BtnRegisterEdit.setText("Registrar");
+        BtnRegisterEdit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnRegisterActionPerformed(evt);
+                BtnRegisterEditActionPerformed(evt);
             }
         });
 
@@ -67,7 +77,7 @@ public class CostumerTemplate extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(BtnRegister)
+                .addComponent(BtnRegisterEdit)
                 .addGap(18, 18, 18)
                 .addComponent(BtnCancel)
                 .addContainerGap(22, Short.MAX_VALUE))
@@ -77,7 +87,7 @@ public class CostumerTemplate extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(BtnRegister)
+                    .addComponent(BtnRegisterEdit)
                     .addComponent(BtnCancel))
                 .addContainerGap(27, Short.MAX_VALUE))
         );
@@ -159,29 +169,31 @@ public class CostumerTemplate extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_BtnCancelActionPerformed
 
-    private void BtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRegisterActionPerformed
-        HashMap<String,String> data = new HashMap();
-        data.put("name",txtFldName.getText());
-        data.put("id",txtFldId.getText());
-        data.put("address",txtFldAddress.getText());
-        data.put("mail",txtFldMail.getText());
-        data.put("phone",txtFldPhone.getText());
-        int ans = ManagerCostumer.registerCostumer(data);
-        if(ans == ManagerCostumer.VALIDATION_SUCCESS){
-            int aux = JOptionPane.showConfirmDialog(null, "Usuario Creado Exitosamente, Desea Continuar Con La Compra?", "", JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE);
-            if(aux==0){
-                BuyTemplate bt = new BuyTemplate(ManagerCostumer.getCostumer(Long.parseLong(data.get("id"))));
+    private void BtnRegisterEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnRegisterEditActionPerformed
+        HashMap<String, String> data = new HashMap();
+        data.put("name", txtFldName.getText());
+        data.put("id", txtFldId.getText());
+        data.put("address", txtFldAddress.getText());
+        data.put("mail", txtFldMail.getText());
+        data.put("phone", txtFldPhone.getText());
+        int ans = editing ? ManagerCostumer.validateCostumerDataAndExist(Long.parseLong(data.get("id")), data) : ManagerCostumer.validateCostumerData(data);
+        if (ans == ManagerCostumer.VALIDATION_SUCCESS) {
+            if (onStore) {
+                int aux = JOptionPane.showConfirmDialog(null, "Usuario Creado Exitosamente, Desea Continuar Con La Compra?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+            }
+            if (aux == 0) {
+                BuyTemplate bt = new BuyTemplate(Long.parseLong(data.get("id")));
                 bt.setVisible(true);
                 dispose();
-            }else{
+            } else {
                 MainMenu mm = new MainMenu();
                 mm.setVisible(true);
                 dispose();
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, ManagerCostumer.getErrorDescription(ans), "", JOptionPane.ERROR_MESSAGE);
         }
-    }//GEN-LAST:event_BtnRegisterActionPerformed
+    }//GEN-LAST:event_BtnRegisterEditActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,14 +212,18 @@ public class CostumerTemplate extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CostumerTemplate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CostumerTemplate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CostumerTemplate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CostumerTemplate.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -216,14 +232,14 @@ public class CostumerTemplate extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CostumerTemplate().setVisible(true);
+                new CostumerDataRequest().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancel;
-    private javax.swing.JButton BtnRegister;
+    private javax.swing.JButton BtnRegisterEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

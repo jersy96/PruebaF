@@ -1,6 +1,7 @@
 package gui;
 
 import code.Costumer;
+import code.ManagerCostumer;
 import code.ManagerProduct;
 import code.Product;
 import java.util.ArrayList;
@@ -11,11 +12,11 @@ public class BuyTemplate extends javax.swing.JFrame {
 
     DefaultTableModel modelAP = new DefaultTableModel();
     DefaultTableModel modelC = new DefaultTableModel();
-    Costumer costumer;
+    Long costumerId;
 
-    public BuyTemplate(Costumer c) {
+    public BuyTemplate(Long id) {
         initComponents();
-        costumer = c;
+        costumerId = id;
         modelAP.addColumn("Nombre");
         modelAP.addColumn("Codigo");
         modelAP.addColumn("Precio");
@@ -218,7 +219,7 @@ public class BuyTemplate extends javax.swing.JFrame {
         }
         ArrayList<Product> products;
         products = ManagerProduct.getListOfProductCopy(codes);
-        costumer.buy(products);
+        ManagerCostumer.letBuy(costumerId, products);
         JOptionPane.showMessageDialog(null, "Compra exitosa", "", JOptionPane.INFORMATION_MESSAGE);
         MainMenu mm = new MainMenu();
         mm.setVisible(true);
