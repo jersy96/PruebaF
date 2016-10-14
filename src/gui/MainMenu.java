@@ -118,7 +118,7 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnStoreActionPerformed
 
     private void BtnOfficesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOfficesActionPerformed
-        por aqui voy
+        
     }//GEN-LAST:event_BtnOfficesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
