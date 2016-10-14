@@ -5,6 +5,13 @@
  */
 package gui;
 
+import code.Costumer;
+import code.ManagerCostumer;
+import java.util.ArrayList;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jronc
@@ -14,10 +21,38 @@ public class CostumerOptions extends javax.swing.JFrame {
     /**
      * Creates new form CostumerOptions
      */
+    private static CostumerOptions activeWindow;
+    
+    DefaultTableModel model;
     public CostumerOptions() {
         initComponents();
+        model = (DefaultTableModel)table.getModel();
+        setAsActiveWindow();
+        syncTableData();
     }
-
+    
+    private void setAsActiveWindow(){
+        if(this == null){
+            System.out.println("esta vaina es null loco");
+        }
+        activeWindow = this;
+    }
+    
+    public static void syncTableData(){
+        activeWindow.syncData();
+    }
+    
+    private void syncData(){
+        model.setRowCount(0);
+        ArrayList<Costumer> costumers = ManagerCostumer.getList();
+        for(Costumer c : costumers){
+            System.out.println(c.getName());
+            model.addRow(new String[] {c.getName(), c.getID().toString(), c.getAddress(), c.getMail(), c.getPhone().toString()});
+        }
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,7 +63,7 @@ public class CostumerOptions extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
@@ -37,12 +72,9 @@ public class CostumerOptions extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
                 "Nombre", "Cedula", "Direccion", "Correo", "Celular"
@@ -63,16 +95,31 @@ public class CostumerOptions extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Listado de clientes");
 
         btnEdit.setText("Editar Cliente");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Eliminar Cliente");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnAdd.setText("Agregar Cliente");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Volver");
 
@@ -97,7 +144,7 @@ public class CostumerOptions extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnDelete, btnEdit});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnAdd, btnBack, btnDelete, btnEdit});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,42 +166,32 @@ public class CostumerOptions extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CostumerOptions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CostumerOptions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CostumerOptions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CostumerOptions.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        CostumerDataRequest cdr = new CostumerDataRequest(CostumerDataRequest.ON_OFFICES);
+        cdr.setVisible(true);
+    }//GEN-LAST:event_btnAddActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CostumerOptions().setVisible(true);
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        CostumerDataRequest cdr = new CostumerDataRequest(CostumerDataRequest.ON_OFFICES_EDITING);
+        cdr.setVisible(true);
+        por aqui voy
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int[] toDelete = table.getSelectedRows();
+        if(toDelete.length > 0){
+            for(int i : toDelete){
+                Long id = Long.parseLong((String)table.getValueAt(i, 1));
+                ManagerCostumer.deleteCostumer(id);
+                model.removeRow(i);
             }
-        });
-    }
+        }else{
+            JOptionPane.showMessageDialog(null, "Primero debe seleccionar un cliente de la lista", "", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -163,6 +200,6 @@ public class CostumerOptions extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }

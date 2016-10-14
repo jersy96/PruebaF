@@ -82,16 +82,16 @@ public class ManagerCostumer {
         costumers.add(new Costumer(data.get("name"), id, data.get("address"), data.get("mail"), phone));
     }
 
-    public static ArrayList<String> getList() {
-        ArrayList<String> a = new ArrayList();
-        int i = 1;
-        for (Costumer c : costumers) {
-            a.add((i++) + ") nombre: " + c.getName() + ", cedula: " + c.getID() + ", direccion: " + c.getAddress() + ", correo: " + c.getMail() + ", celular: " + c.getPhone());
-        }
-        if (i == 1) {
-            a.add("Aun no hay clientes");
-        }
-        return a;
+    public static ArrayList<Costumer> getList() {
+//        ArrayList<String> a = new ArrayList();
+//        int i = 1;
+//        for (Costumer c : costumers) {
+//            a.add((i++) + ") nombre: " + c.getName() + ", cedula: " + c.getID() + ", direccion: " + c.getAddress() + ", correo: " + c.getMail() + ", celular: " + c.getPhone());
+//        }
+//        if (i == 1) {
+//            a.add("Aun no hay clientes");
+//        }
+        return (ArrayList<Costumer>)costumers.clone();
     }
 
     public static ArrayList<String> getCompetitors() {
@@ -166,7 +166,7 @@ public class ManagerCostumer {
             case VALIDATION_ERROR_ID:
                 return "Esta cedula ya existe en nuestra base de datos por favor digite otra";
             case VALIDATION_ERROR_PHONE:
-                return "El ceulular debe tener exactamente 10 numeros";
+                return "El celular debe tener exactamente 10 numeros";
             case VALIDATION_ERROR_ID_NOT_FOUND:
                 return "Esta cedula no existe en nuestra base de datos";
             default:

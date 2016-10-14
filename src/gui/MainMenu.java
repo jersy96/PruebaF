@@ -103,11 +103,10 @@ public class MainMenu extends javax.swing.JFrame {
     private void BtnStoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnStoreActionPerformed
         Long id = Long.parseLong(JOptionPane.showInputDialog(null, "Digite su cedula:", "", JOptionPane.PLAIN_MESSAGE));
         if (ManagerCostumer.validateExistingCostumer(id) != ManagerCostumer.VALIDATION_SUCCESS) {
-            int op = JOptionPane.showConfirmDialog(null, "Usted no esta registrado en nuestra base de datos, Desea Registrarse?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+            int op = JOptionPane.showConfirmDialog(null, "Usted no esta registrado en nuestra base de datos, desea registrarse?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (op == 0) {
                 CostumerDataRequest ct = new CostumerDataRequest(CostumerDataRequest.ON_STORE);
                 ct.setVisible(true);
-                dispose();
             }
         } else {
             BuyTemplate bt;
@@ -118,7 +117,9 @@ public class MainMenu extends javax.swing.JFrame {
     }//GEN-LAST:event_BtnStoreActionPerformed
 
     private void BtnOfficesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnOfficesActionPerformed
-        
+        OfficesOptions oo = new OfficesOptions();
+        oo.setVisible(true);
+        dispose();
     }//GEN-LAST:event_BtnOfficesActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
