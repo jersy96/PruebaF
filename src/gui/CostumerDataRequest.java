@@ -18,17 +18,28 @@ public class CostumerDataRequest extends javax.swing.JFrame {
     /**
      * Creates new form CostumerDataRequest
      */
-    boolean editing;
-    boolean onStore;
+    private boolean editing;
+    private boolean onStore;
+    public static final int ON_STORE = 0;
+    public static final int ON_OFFICES = 1;
+    public static final int ON_OFFICES_EDITING = 2;
 
-    public CostumerDataRequest(boolean onStore, boolean editing) {
+    public CostumerDataRequest(int op) {
         initComponents();
-        BtnRegisterEdit.setText("Editar");
-        this.onStore = onStore;
-        if (!onStore) {
-            this.editing = false;
-        } else {
-            this.editing = editing;
+        switch (op) {
+            case ON_STORE:
+                onStore = true;
+                editing = false;
+                break;
+            case ON_OFFICES:
+                onStore = false;
+                editing = false;
+                break;
+            case ON_OFFICES_EDITING:
+                onStore = false;
+                editing = true;
+                BtnRegisterEdit.setText("Editar");
+                break;
         }
     }
 
@@ -176,67 +187,30 @@ public class CostumerDataRequest extends javax.swing.JFrame {
         data.put("address", txtFldAddress.getText());
         data.put("mail", txtFldMail.getText());
         data.put("phone", txtFldPhone.getText());
-        int ans = editing ? ManagerCostumer.validateCostumerDataAndExist(Long.parseLong(data.get("id")), data) : ManagerCostumer.validateCostumerData(data);
+        Long id = Long.parseLong(data.get("id"));
+        int ans = editing ? ManagerCostumer.validateCostumerDataAndExist(id, data) : ManagerCostumer.validateCostumerData(data);
         if (ans == ManagerCostumer.VALIDATION_SUCCESS) {
             if (onStore) {
+                ManagerCostumer.registerCostumer(data);
                 int aux = JOptionPane.showConfirmDialog(null, "Usuario Creado Exitosamente, Desea Continuar Con La Compra?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-            }
-            if (aux == 0) {
-                BuyTemplate bt = new BuyTemplate(Long.parseLong(data.get("id")));
-                bt.setVisible(true);
-                dispose();
+                if (aux == 0) {
+                    BuyTemplate bt = new BuyTemplate(Long.parseLong(data.get("id")));
+                    bt.setVisible(true);
+                    dispose();
+                } else {
+                    MainMenu mm = new MainMenu();
+                    mm.setVisible(true);
+                    dispose();
+                }
+            } else if (editing) {
+                ManagerCostumer.editCostumer(id, data);
             } else {
-                MainMenu mm = new MainMenu();
-                mm.setVisible(true);
-                dispose();
+                ManagerCostumer.registerCostumer(data);
             }
         } else {
             JOptionPane.showMessageDialog(null, ManagerCostumer.getErrorDescription(ans), "", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_BtnRegisterEditActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CostumerDataRequest.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new CostumerDataRequest().setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnCancel;
     private javax.swing.JButton BtnRegisterEdit;
