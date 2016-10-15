@@ -18,29 +18,33 @@ public class CostumerDataRequest extends javax.swing.JFrame {
     /**
      * Creates new form CostumerDataRequest
      */
-    private boolean editing;
-    private boolean onStore;
-    public static final int ON_STORE = 0;
-    public static final int ON_OFFICES = 1;
-    public static final int ON_OFFICES_EDITING = 2;
+    private Long idOfCostumerToEdit;
+    private final int location;
+    public static final int STORE = 0;
+    public static final int OFFICES = 1;
+    private static final int OFFICES_AND_EDITING = 2;
 
     public CostumerDataRequest(int op) {
         initComponents();
-        switch (op) {
-            case ON_STORE:
-                onStore = true;
-                editing = false;
-                break;
-            case ON_OFFICES:
-                onStore = false;
-                editing = false;
-                break;
-            case ON_OFFICES_EDITING:
-                onStore = false;
-                editing = true;
-                BtnRegisterEdit.setText("Editar");
-                break;
-        }
+        location = op;
+    }
+    
+    public CostumerDataRequest(int op, Long id){
+        initComponents();
+        location = OFFICES_AND_EDITING;
+        idOfCostumerToEdit = id;
+        BtnRegisterEdit.setText("Editar");
+        HashMap<String, String> currentDataOfCostumerToEdit =  ManagerCostumer.getCostumerDataInHashMap(idOfCostumerToEdit);
+        txtFldName.setText(currentDataOfCostumerToEdit.get("name"));
+        txtFldName.selectAll();
+        txtFldId.setText(currentDataOfCostumerToEdit.get("id"));
+        txtFldId.selectAll();
+        txtFldAddress.setText(currentDataOfCostumerToEdit.get("address"));
+        txtFldAddress.selectAll();
+        txtFldMail.setText(currentDataOfCostumerToEdit.get("mail"));
+        txtFldMail.selectAll();
+        txtFldPhone.setText(currentDataOfCostumerToEdit.get("phone"));
+        txtFldPhone.selectAll();
     }
 
     /**
@@ -176,10 +180,9 @@ public class CostumerDataRequest extends javax.swing.JFrame {
         data.put("address", txtFldAddress.getText());
         data.put("mail", txtFldMail.getText());
         data.put("phone", txtFldPhone.getText());
-        Long id = Long.parseLong(data.get("id"));
-        int ans = editing ? ManagerCostumer.validateCostumerDataAndExist(id, data) : ManagerCostumer.validateCostumerData(data);
+        int ans = location == OFFICES_AND_EDITING ? ManagerCostumer.validateCostumerDataForEdit(idOfCostumerToEdit, data) : ManagerCostumer.validateCostumerData(data);
         if (ans == ManagerCostumer.VALIDATION_SUCCESS) {
-            if (onStore) {
+            if (location == STORE) {
                 ManagerCostumer.registerCostumer(data);
                 int aux = JOptionPane.showConfirmDialog(null, "Usuario Creado Exitosamente, Desea Continuar Con La Compra?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (aux == 0) {
@@ -187,8 +190,8 @@ public class CostumerDataRequest extends javax.swing.JFrame {
                     bt.setVisible(true);
                 }
             } else {
-                if (editing) {
-                    ManagerCostumer.editCostumer(id, data);
+                if (location == OFFICES_AND_EDITING) {
+                    ManagerCostumer.editCostumer(idOfCostumerToEdit, data);
                 } else {
                     ManagerCostumer.registerCostumer(data);
                 }

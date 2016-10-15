@@ -22,37 +22,36 @@ public class CostumerOptions extends javax.swing.JFrame {
      * Creates new form CostumerOptions
      */
     private static CostumerOptions activeWindow;
-    
+
     DefaultTableModel model;
+
     public CostumerOptions() {
         initComponents();
-        model = (DefaultTableModel)table.getModel();
+        model = (DefaultTableModel) table.getModel();
         setAsActiveWindow();
         syncTableData();
     }
-    
-    private void setAsActiveWindow(){
-        if(this == null){
+
+    private void setAsActiveWindow() {
+        if (this == null) {
             System.out.println("esta vaina es null loco");
         }
         activeWindow = this;
     }
-    
-    public static void syncTableData(){
+
+    public static void syncTableData() {
         activeWindow.syncData();
     }
-    
-    private void syncData(){
+
+    private void syncData() {
         model.setRowCount(0);
         ArrayList<Costumer> costumers = ManagerCostumer.getList();
-        for(Costumer c : costumers){
+        for (Costumer c : costumers) {
             System.out.println(c.getName());
-            model.addRow(new String[] {c.getName(), c.getID().toString(), c.getAddress(), c.getMail(), c.getPhone().toString()});
+            model.addRow(new String[]{c.getName(), c.getID().toString(), c.getAddress(), c.getMail(), c.getPhone().toString()});
         }
     }
-    
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,25 +169,35 @@ public class CostumerOptions extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
-        CostumerDataRequest cdr = new CostumerDataRequest(CostumerDataRequest.ON_OFFICES);
+        CostumerDataRequest cdr = new CostumerDataRequest(CostumerDataRequest.OFFICES);
         cdr.setVisible(true);
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
-        CostumerDataRequest cdr = new CostumerDataRequest(CostumerDataRequest.ON_OFFICES_EDITING);
-        cdr.setVisible(true);
-        por aqui voy
+        int[] toEdit = table.getSelectedRows();
+        int tam = toEdit.length;
+        if (tam == 1) {
+            Long id = Long.parseLong((String) table.getValueAt(toEdit[0], 1));
+            CostumerDataRequest cdr = new CostumerDataRequest(CostumerDataRequest.OFFICES, id);
+            cdr.setVisible(true);
+        } else {
+            if (tam == 0) {
+                JOptionPane.showMessageDialog(null, "Primero debe seleccionar un cliente de la lista", "", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un solo cliente que editar", "", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         int[] toDelete = table.getSelectedRows();
-        if(toDelete.length > 0){
-            for(int i : toDelete){
-                Long id = Long.parseLong((String)table.getValueAt(i, 1));
+        if (toDelete.length > 0) {
+            for (int i : toDelete) {
+                Long id = Long.parseLong((String) table.getValueAt(i, 1));
                 ManagerCostumer.deleteCostumer(id);
                 model.removeRow(i);
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Primero debe seleccionar un cliente de la lista", "", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed

@@ -11,13 +11,28 @@ public class ManagerCostumer {
     private static final ArrayList<Costumer> costumers = new ArrayList();
     public static final int VALIDATION_SUCCESS = 0;
     public static final int VALIDATION_ERROR_NAME = 1;
-    public static final int VALIDATION_ERROR_ID = 2;
+    public static final int VALIDATION_ERROR_ID_USED = 2;
     public static final int VALIDATION_ERROR_PHONE = 3;
     public static final int VALIDATION_ERROR_ID_NOT_FOUND = -1;
 
-    protected static Costumer getCostumer(Long id) {
+    public static HashMap<String, String> getCostumerDataInHashMap(Long id) {
         for (Costumer c : costumers) {
-            if (c.getID().equals(id)) {//Objects.equals(c.getID(), id)
+            if (c.getID().equals(id)) {
+                HashMap data = new HashMap();
+                data.put("name", c.getName());
+                data.put("id", c.getID().toString());
+                data.put("address", c.getAddress());
+                data.put("mail", c.getMail());
+                data.put("phone", c.getPhone().toString());
+                return data;
+            }
+        }
+        return null;
+    }
+
+    protected static Costumer getCostumerDeepCopy(Long id) {
+        for (Costumer c : costumers) {
+            if (c.getID().equals(id)) {
                 return c;
             }
         }
@@ -27,7 +42,7 @@ public class ManagerCostumer {
     private static int getCostumerIndex(Long id) {
         int i = 0;
         for (Costumer c : costumers) {
-            if (c.getID().equals(id)) {//Objects.equals(c.getID(), id)
+            if (c.getID().equals(id)) {
                 return i;
             }
             i++;
@@ -35,47 +50,43 @@ public class ManagerCostumer {
         return VALIDATION_ERROR_ID_NOT_FOUND;
     }
 
-    private static boolean verifyCostumerID(Long id) {//es necesario dejarla porque esta no solo me dice si la cedula existe o no sino que tambien tiene en cuenta si esa cedula la estan editando o no, y eso no lo tiene en cuenta getCsotumerINdex
-        for (Costumer c : costumers) {
-            if (c.getID().equals(id) && (editing >= 0 ? !(costumers.get(editing).getID().equals(id)) : true)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static int validateExistingCostumer(Long id) {
-        if (verifyCostumerID(id)) {
-            return VALIDATION_SUCCESS;
-        }
-        return VALIDATION_ERROR_ID_NOT_FOUND;
+    public static boolean validateIfIdIsUsed(Long id) {//es necesario dejar este metodo porque este no solo me dice si la cedula ya esta siendo usada o no sino que tambien tiene en cuenta si esa cedula la estan editando o no, y eso no lo tiene en cuenta getCsotumerIndex
+        return getCostumerIndex(id) != -1;
     }
 
     public static int validateCostumerData(HashMap<String, String> data) {
         if (data.get("name").length() < 3 || !(data.get("name").matches("([a-z]|[A-Z]|\\s)+"))) {
             return VALIDATION_ERROR_NAME;
         }
-        if (verifyCostumerID(Long.parseLong(data.get("id")))) {
-            return VALIDATION_ERROR_ID;
+
+        if (validateIfIdIsUsed(Long.parseLong(data.get("id")))) {
+            return VALIDATION_ERROR_ID_USED;
         }
+
         if ((int) (Math.log10(Long.parseLong(data.get("phone"))) + 1) != 10) {
             return VALIDATION_ERROR_PHONE;
         }
         return VALIDATION_SUCCESS;
     }
 
-    public static int validateCostumerDataAndExist(Long id, HashMap<String,String> data){
-        int aux = validateExistingCostumer(id);
-        if(aux!=VALIDATION_SUCCESS){
-            return aux;
+    public static int validateCostumerDataForEdit(Long idOfCostumerToEdit, HashMap<String, String> data) {
+        if (data.get("name").length() < 3 || !(data.get("name").matches("([a-z]|[A-Z]|\\s)+"))) {
+            return VALIDATION_ERROR_NAME;
         }
-        aux = validateCostumerData(data);
-        if(aux!=VALIDATION_SUCCESS){
-            return aux;
+
+        Long newId = Long.parseLong(data.get("id"));
+        if (!idOfCostumerToEdit.equals(newId)) {
+            if (validateIfIdIsUsed(newId)) {
+                return VALIDATION_ERROR_ID_USED;
+            }
+        }
+
+        if ((int) (Math.log10(Long.parseLong(data.get("phone"))) + 1) != 10) {
+            return VALIDATION_ERROR_PHONE;
         }
         return VALIDATION_SUCCESS;
     }
-    
+
     public static void registerCostumer(HashMap<String, String> data) {
         Long id = Long.parseLong(data.get("id"));
         Long phone = Long.parseLong(data.get("phone"));
@@ -83,15 +94,7 @@ public class ManagerCostumer {
     }
 
     public static ArrayList<Costumer> getList() {
-//        ArrayList<String> a = new ArrayList();
-//        int i = 1;
-//        for (Costumer c : costumers) {
-//            a.add((i++) + ") nombre: " + c.getName() + ", cedula: " + c.getID() + ", direccion: " + c.getAddress() + ", correo: " + c.getMail() + ", celular: " + c.getPhone());
-//        }
-//        if (i == 1) {
-//            a.add("Aun no hay clientes");
-//        }
-        return (ArrayList<Costumer>)costumers.clone();
+        return (ArrayList<Costumer>) costumers.clone();
     }
 
     public static ArrayList<String> getCompetitors() {
@@ -142,28 +145,23 @@ public class ManagerCostumer {
     }
 
     public static void editCostumer(Long id, HashMap<String, String> data) {
-        int i = getCostumerIndex(id);
-        editing = i;
-        Costumer c = costumers.get(i);
-        Long idd = Long.parseLong(data.get("id"));
-        Long phone = Long.parseLong(data.get("phone"));
+        Costumer c = costumers.get(getCostumerIndex(id));
         c.setName(data.get("name"));
-        c.setID(idd);
+        c.setID(Long.parseLong(data.get("id")));
         c.setAddress(data.get("address"));
         c.setMail(data.get("mail"));
-        c.setPhone(phone);
-        editing = -1;
+        c.setPhone(Long.parseLong(data.get("phone")));
     }
 
     public static void letBuy(Long id, ArrayList<Product> products) {
-        getCostumer(id).buy(products);
+        getCostumerDeepCopy(id).buy(products);
     }
 
     public static String getErrorDescription(int error) {
         switch (error) {
             case VALIDATION_ERROR_NAME:
                 return "El nombre debe tener longitud almenos 3 y solo debe contener letras";
-            case VALIDATION_ERROR_ID:
+            case VALIDATION_ERROR_ID_USED:
                 return "Esta cedula ya existe en nuestra base de datos por favor digite otra";
             case VALIDATION_ERROR_PHONE:
                 return "El celular debe tener exactamente 10 numeros";

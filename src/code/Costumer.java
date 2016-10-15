@@ -43,7 +43,11 @@ public class Costumer {
     public int getPoints() {
         return points;
     }
-
+    
+    public Costumer shallowCopy(){
+        return new Costumer(this.getName(), this.getID(), this.getAddress(), this.getMail(), this.getPhone());
+    }
+    
     public int getTotalSpended() {
         return totalSpended;
     }

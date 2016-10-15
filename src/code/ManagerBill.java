@@ -11,7 +11,7 @@ public class ManagerBill {
     }
     public static int editBill(int i, Long id, ArrayList<Product> products){
         Costumer c;
-        c = ManagerCostumer.getCostumer(id);
+        c = ManagerCostumer.getCostumerDeepCopy(id);
         if(c == null){
             return VALIDATION_ERROR_COSTUMER_NOT_FOUND;
         }

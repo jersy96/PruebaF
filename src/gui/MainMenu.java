@@ -102,17 +102,17 @@ public class MainMenu extends javax.swing.JFrame {
 
     private void BtnStoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnStoreActionPerformed
         Long id = Long.parseLong(JOptionPane.showInputDialog(null, "Digite su cedula:", "", JOptionPane.PLAIN_MESSAGE));
-        if (ManagerCostumer.validateExistingCostumer(id) != ManagerCostumer.VALIDATION_SUCCESS) {
-            int op = JOptionPane.showConfirmDialog(null, "Usted no esta registrado en nuestra base de datos, desea registrarse?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (op == 0) {
-                CostumerDataRequest ct = new CostumerDataRequest(CostumerDataRequest.ON_STORE);
-                ct.setVisible(true);
-            }
-        } else {
+        if (ManagerCostumer.validateIfIdIsUsed(id)) {
             BuyTemplate bt;
             bt = new BuyTemplate(id);
             bt.setVisible(true);
             dispose();
+        } else {
+            int op = JOptionPane.showConfirmDialog(null, "Usted no esta registrado en nuestra base de datos, desea registrarse?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (op == 0) {
+                CostumerDataRequest ct = new CostumerDataRequest(CostumerDataRequest.STORE);
+                ct.setVisible(true);
+            }
         }
     }//GEN-LAST:event_BtnStoreActionPerformed
 
