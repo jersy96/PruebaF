@@ -4,6 +4,7 @@ import code.ManagerCostumer;
 import code.ManagerProduct;
 import code.Product;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -12,10 +13,19 @@ public class BuyTemplate extends javax.swing.JFrame {
     DefaultTableModel modelAP = new DefaultTableModel();
     DefaultTableModel modelC = new DefaultTableModel();
     Long costumerId;
+    int totalValue;
+    String labelTotalValueMsg;
+    String labelWelcomeMsg;
 
     public BuyTemplate(Long id) {
         initComponents();
+        this.totalValue = 0;
+        labelTotalValueMsg = "Total: ";
+        labelWelcomeMsg = "Bienvenido ";
+        labelTotalValue.setText(labelTotalValueMsg + totalValue);
         costumerId = id;
+        HashMap<String, String> data = ManagerCostumer.getCostumerDataInHashMap(id);
+        labelWelcome.setText(labelWelcomeMsg + data.get("name"));
         modelAP.addColumn("Nombre");
         modelAP.addColumn("Codigo");
         modelAP.addColumn("Precio");
@@ -48,6 +58,8 @@ public class BuyTemplate extends javax.swing.JFrame {
         btnRemoveFromCart = new javax.swing.JButton();
         btnBuy = new javax.swing.JButton();
         btnCancelBuy = new javax.swing.JButton();
+        labelTotalValue = new javax.swing.JLabel();
+        labelWelcome = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -126,6 +138,12 @@ public class BuyTemplate extends javax.swing.JFrame {
             }
         });
 
+        labelTotalValue.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        labelTotalValue.setText("jLabel3");
+
+        labelWelcome.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        labelWelcome.setText("jLabel4");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -133,19 +151,25 @@ public class BuyTemplate extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnAddToCart, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
-                            .addComponent(btnRemoveFromCart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnBuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCancelBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                            .addComponent(jLabel1)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnAddToCart, javax.swing.GroupLayout.PREFERRED_SIZE, 123, Short.MAX_VALUE)
+                                    .addComponent(btnRemoveFromCart, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnBuy, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnCancelBuy, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelTotalValue)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(labelWelcome)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -155,7 +179,9 @@ public class BuyTemplate extends javax.swing.JFrame {
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelWelcome)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
@@ -175,7 +201,9 @@ public class BuyTemplate extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnCancelBuy))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(labelTotalValue)
+                .addContainerGap())
         );
 
         pack();
@@ -184,7 +212,6 @@ public class BuyTemplate extends javax.swing.JFrame {
 
     private void btnAddToCartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddToCartActionPerformed
         int aux = availableProducts.getSelectedRow();
-        System.out.println(aux);
         if (aux < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un producto disponible para agregarlo al carrito", "", JOptionPane.ERROR_MESSAGE);
         } else {
@@ -192,6 +219,8 @@ public class BuyTemplate extends javax.swing.JFrame {
             String code = (String) availableProducts.getValueAt(aux, 1);
             String price = (String) availableProducts.getValueAt(aux, 2);
             modelC.addRow(new String[]{name, code, price});
+            totalValue += Integer.parseInt(price);
+            labelTotalValue.setText(labelTotalValueMsg + totalValue);
         }
     }//GEN-LAST:event_btnAddToCartActionPerformed
 
@@ -200,6 +229,9 @@ public class BuyTemplate extends javax.swing.JFrame {
         if (aux < 0) {
             JOptionPane.showMessageDialog(null, "Debe seleccionar un producto del carrito para poder eliminarlo", "", JOptionPane.ERROR_MESSAGE);
         } else {
+            String price = (String) cart.getValueAt(aux, 2);
+            totalValue -= Integer.parseInt(price);
+            labelTotalValue.setText(labelTotalValueMsg + totalValue);
             modelC.removeRow(aux);
         }
     }//GEN-LAST:event_btnRemoveFromCartActionPerformed
@@ -214,15 +246,20 @@ public class BuyTemplate extends javax.swing.JFrame {
         ArrayList<String> codes = new ArrayList();
         int tam = cart.getRowCount();
         for (int i = 0; i < tam; i++) {
-            codes.add((String) modelC.getValueAt(1, i));
+            codes.add((String) modelC.getValueAt(i, 1));
         }
         ArrayList<Product> products;
         products = ManagerProduct.getListOfProductCopy(codes);
-        ManagerCostumer.letBuy(costumerId, products);
-        JOptionPane.showMessageDialog(null, "Compra exitosa", "", JOptionPane.INFORMATION_MESSAGE);
-        MainMenu mm = new MainMenu();
-        mm.setVisible(true);
-        dispose();
+
+        int aux = ManagerCostumer.validateAndExecuteBuy(costumerId, products);
+        if (aux == ManagerCostumer.VALIDATION_SUCCESS) {
+            JOptionPane.showMessageDialog(null, "Compra exitosa", "", JOptionPane.INFORMATION_MESSAGE);
+            MainMenu mm = new MainMenu();
+            mm.setVisible(true);
+            dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, ManagerCostumer.getErrorDescription(aux), "", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnBuyActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -236,5 +273,7 @@ public class BuyTemplate extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel labelTotalValue;
+    private javax.swing.JLabel labelWelcome;
     // End of variables declaration//GEN-END:variables
 }

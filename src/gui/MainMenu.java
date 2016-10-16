@@ -101,17 +101,21 @@ public class MainMenu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnStoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnStoreActionPerformed
-        Long id = Long.parseLong(JOptionPane.showInputDialog(null, "Digite su cedula:", "", JOptionPane.PLAIN_MESSAGE));
-        if (ManagerCostumer.validateIfIdIsUsed(id)) {
-            BuyTemplate bt;
-            bt = new BuyTemplate(id);
-            bt.setVisible(true);
-            dispose();
-        } else {
-            int op = JOptionPane.showConfirmDialog(null, "Usted no esta registrado en nuestra base de datos, desea registrarse?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (op == 0) {
-                CostumerDataRequest ct = new CostumerDataRequest(CostumerDataRequest.STORE);
-                ct.setVisible(true);
+        String str = JOptionPane.showInputDialog(null, "Digite su cedula:", "", JOptionPane.PLAIN_MESSAGE);
+        if(str != null){
+            Long id = Long.parseLong(str);
+            if (ManagerCostumer.validateIfIdIsUsed(id)) {
+                BuyTemplate bt;
+                bt = new BuyTemplate(id);
+                bt.setVisible(true);
+                dispose();
+            } else {
+                int op = JOptionPane.showConfirmDialog(null, "Usted no esta registrado en nuestra base de datos, desea registrarse?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (op == 0) {
+                    CostumerDataRequest ct = new CostumerDataRequest(CostumerDataRequest.STORE);
+                    ct.setVisible(true);
+                    dispose();
+                }
             }
         }
     }//GEN-LAST:event_BtnStoreActionPerformed

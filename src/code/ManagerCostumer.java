@@ -12,6 +12,7 @@ public class ManagerCostumer {
     public static final int VALIDATION_ERROR_NAME = 1;
     public static final int VALIDATION_ERROR_ID_USED = 2;
     public static final int VALIDATION_ERROR_PHONE = 3;
+    public static final int VALIDATION_ERROR_EMPTY_CART = 4;
     public static final int VALIDATION_ERROR_ID_NOT_FOUND = -1;
 
     public static HashMap<String, String> getCostumerDataInHashMap(Long id) {
@@ -134,8 +135,12 @@ public class ManagerCostumer {
         c.setPhone(Long.parseLong(data.get("phone")));
     }
 
-    public static void letBuy(Long id, ArrayList<Product> products) {
-        getCostumerDeepCopy(id).buy(products);
+    public static int validateAndExecuteBuy(Long id, ArrayList<Product> products) {
+        if(products.size() > 0){
+            getCostumerDeepCopy(id).buy(products);
+            return VALIDATION_SUCCESS;
+        }
+        return VALIDATION_ERROR_EMPTY_CART;
     }
 
     public static String getErrorDescription(int error) {
@@ -148,6 +153,8 @@ public class ManagerCostumer {
                 return "El celular debe tener exactamente 10 numeros";
             case VALIDATION_ERROR_ID_NOT_FOUND:
                 return "Esta cedula no existe en nuestra base de datos";
+            case VALIDATION_ERROR_EMPTY_CART:
+                return "El carrito no puede estar vacio";
             default:
                 return "Error desconocido";
         }
