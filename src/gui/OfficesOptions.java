@@ -56,6 +56,11 @@ public class OfficesOptions extends javax.swing.JFrame {
         btnFacturas.setText("Facturas");
 
         btnInformation.setText("Informacion");
+        btnInformation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnInformationActionPerformed(evt);
+            }
+        });
 
         btnCancel.setText("Volver");
 
@@ -113,6 +118,12 @@ public class OfficesOptions extends javax.swing.JFrame {
         pos.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnProductsActionPerformed
+
+    private void btnInformationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformationActionPerformed
+        InformationOptions io = new InformationOptions();
+        io.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnInformationActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

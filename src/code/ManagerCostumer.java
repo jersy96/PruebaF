@@ -79,44 +79,61 @@ public class ManagerCostumer {
         return (ArrayList<Costumer>) costumers.clone();
     }
 
-    public static ArrayList<String> getCompetitors() {
-        ArrayList<String> a = new ArrayList();
+    public static ArrayList<HashMap<String, String>> getCompetitors() {
+        ArrayList<HashMap<String, String>> a = new ArrayList();
         int i = 1;
         for (Costumer c : costumers) {
             if (c.getPoints() > POINTS_TO_BE_COMPETITOR) {
-                a.add((i++) + ") nombre: " + c.getName() + ", cedula: " + c.getID() + ", direccion: " + c.getAddress() + ", correo: " + c.getMail() + ", celular: " + c.getPhone());
+                HashMap<String, String> hm = new HashMap();
+                hm.put("Numero", ""+(i++));
+                hm.put("Nombre", c.getName());
+                hm.put("Cedula", c.getID().toString());
+                a.add(hm);
             }
-        }
-        if (i == 1) {
-            a.add("Aun no hay clientes que cumplan las condiciones para participar por premios");
         }
         return a;
     }
 
-    public static ArrayList<String> getCostumersSpendMoreThan(int value) {
-        ArrayList<String> a = new ArrayList();
+    public static ArrayList<HashMap<String, String>> getCostumersSpendMoreThan(int value) {
+        ArrayList<HashMap<String, String>> a = new ArrayList();
         int i = 1;
         for (Costumer c : costumers) {
             if (c.getTotalSpended() > value) {
-                a.add((i++) + ") nombre: " + c.getName() + ", cedula: " + c.getID() + ", direccion: " + c.getAddress() + ", correo: " + c.getMail() + ", celular: " + c.getPhone());
+                HashMap<String, String> hm = new HashMap();
+                hm.put("Numero", ""+(i++));
+                hm.put("Nombre", c.getName());
+                hm.put("Cedula", c.getID().toString());
+                a.add(hm);
             }
-        }
-        if (i == 1) {
-            a.add("No hay clientes que hayan comprado mas de " + value);
         }
         return a;
     }
 
-    public static ArrayList<String> getTotalSales() {
-        ArrayList<String> a = new ArrayList();
+    public static ArrayList<HashMap<String, String>> getTotalSales() {
+        ArrayList<HashMap<String, String>> a = new ArrayList();
         int suma = earnedByDeletedCostumers;
         int i = 1;
         for (Costumer c : costumers) {
-            a.add((i++) + ") nombre: " + c.getName() + ", cedula: " + c.getID() + ", total gastado: " + c.getTotalSpended());
+            HashMap<String, String> hm = new HashMap();
+            hm.put("Numero", ""+(i++));
+            hm.put("Nombre", c.getName());
+            hm.put("Cedula", c.getID().toString());
+            hm.put("Total Gastado", ""+c.getTotalSpended());
+            a.add(hm);
             suma += c.getTotalSpended();
         }
-        a.add("Gastos de los clientes eliminados: " + earnedByDeletedCostumers);
-        a.add("El total ganado en ventas es " + suma);
+        HashMap<String, String> hm = new HashMap();
+        hm.put("Numero", "");
+        hm.put("Nombre", "Eliminados");
+        hm.put("Cedula", "");
+        hm.put("Total Gastado", ""+earnedByDeletedCostumers);
+        a.add(hm);
+        hm = new HashMap();
+        hm.put("Numero", "");
+        hm.put("Nombre", "Total");
+        hm.put("Cedula", "");
+        hm.put("Total Gastado", ""+suma);
+        a.add(hm);
         return a;
     }
 

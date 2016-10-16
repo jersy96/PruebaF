@@ -60,16 +60,18 @@ public class ManagerProduct {
         return (ArrayList<Product>) products.clone();
     }
 
-    public static ArrayList<String> getProductsCheaperThan(int refPrice) {
-        ArrayList<String> a = new ArrayList();
+    public static ArrayList<HashMap<String, String>> getProductsCheaperThan(int refPrice) {
+        ArrayList<HashMap<String, String>> a = new ArrayList();
         int i = 1;
         for (Product p : products) {
             if (p.getPrice() < refPrice) {
-                a.add((i++) + ") nombre: " + p.getName() + ", codigo: " + p.getCode() + ", precio: " + p.getPrice());
+                HashMap<String, String> hm = new HashMap();
+                hm.put("Numero", ""+(i++));
+                hm.put("Nombre", p.getName());
+                hm.put("Codigo", p.getCode().toString());
+                hm.put("Total Gastado", ""+p.getPrice());
+                a.add(hm);
             }
-        }
-        if (i == 1) {
-            a.add("No hay productos que cuesten menos de " + refPrice);
         }
         return a;
     }
