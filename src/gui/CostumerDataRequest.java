@@ -38,7 +38,7 @@ public class CostumerDataRequest extends javax.swing.JFrame {
         txtFldName.setText(currentDataOfCostumerToEdit.get("name"));
         txtFldName.selectAll();
         txtFldId.setText(currentDataOfCostumerToEdit.get("id"));
-        txtFldId.selectAll();
+        txtFldId.setEditable(false);
         txtFldAddress.setText(currentDataOfCostumerToEdit.get("address"));
         txtFldAddress.selectAll();
         txtFldMail.setText(currentDataOfCostumerToEdit.get("mail"));
@@ -180,7 +180,7 @@ public class CostumerDataRequest extends javax.swing.JFrame {
         data.put("address", txtFldAddress.getText());
         data.put("mail", txtFldMail.getText());
         data.put("phone", txtFldPhone.getText());
-        int ans = location == OFFICES_AND_EDITING ? ManagerCostumer.validateCostumerDataForEdit(idOfCostumerToEdit, data) : ManagerCostumer.validateCostumerData(data);
+        int ans = location == OFFICES_AND_EDITING ? ManagerCostumer.validateCostumerData(data, true) : ManagerCostumer.validateCostumerData(data, false);
         if (ans == ManagerCostumer.VALIDATION_SUCCESS) {
             if (location == STORE) {
                 ManagerCostumer.registerCostumer(data);

@@ -5,7 +5,6 @@ import java.util.HashMap;
 
 public class ManagerCostumer {
 
-    private static int editing = -1;
     private static int earnedByDeletedCostumers = 0;
     private static final int POINTS_TO_BE_COMPETITOR = 100000;
     private static final ArrayList<Costumer> costumers = new ArrayList();
@@ -50,35 +49,17 @@ public class ManagerCostumer {
         return VALIDATION_ERROR_ID_NOT_FOUND;
     }
 
-    public static boolean validateIfIdIsUsed(Long id) {//es necesario dejar este metodo porque este no solo me dice si la cedula ya esta siendo usada o no sino que tambien tiene en cuenta si esa cedula la estan editando o no, y eso no lo tiene en cuenta getCsotumerIndex
+    public static boolean validateIfIdIsUsed(Long id) {
         return getCostumerIndex(id) != -1;
     }
 
-    public static int validateCostumerData(HashMap<String, String> data) {
+    public static int validateCostumerData(HashMap<String, String> data, boolean editing) {
         if (data.get("name").length() < 3 || !(data.get("name").matches("([a-z]|[A-Z]|\\s)+"))) {
             return VALIDATION_ERROR_NAME;
         }
 
-        if (validateIfIdIsUsed(Long.parseLong(data.get("id")))) {
+        if (!editing && validateIfIdIsUsed(Long.parseLong(data.get("id")))) {
             return VALIDATION_ERROR_ID_USED;
-        }
-
-        if ((int) (Math.log10(Long.parseLong(data.get("phone"))) + 1) != 10) {
-            return VALIDATION_ERROR_PHONE;
-        }
-        return VALIDATION_SUCCESS;
-    }
-
-    public static int validateCostumerDataForEdit(Long idOfCostumerToEdit, HashMap<String, String> data) {
-        if (data.get("name").length() < 3 || !(data.get("name").matches("([a-z]|[A-Z]|\\s)+"))) {
-            return VALIDATION_ERROR_NAME;
-        }
-
-        Long newId = Long.parseLong(data.get("id"));
-        if (!idOfCostumerToEdit.equals(newId)) {
-            if (validateIfIdIsUsed(newId)) {
-                return VALIDATION_ERROR_ID_USED;
-            }
         }
 
         if ((int) (Math.log10(Long.parseLong(data.get("phone"))) + 1) != 10) {

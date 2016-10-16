@@ -47,6 +47,11 @@ public class OfficesOptions extends javax.swing.JFrame {
         });
 
         btnProducts.setText("Productos");
+        btnProducts.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProductsActionPerformed(evt);
+            }
+        });
 
         btnFacturas.setText("Facturas");
 
@@ -102,6 +107,12 @@ public class OfficesOptions extends javax.swing.JFrame {
         co.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCostumersActionPerformed
+
+    private void btnProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductsActionPerformed
+        ProductOptions pos = new ProductOptions();
+        pos.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnProductsActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

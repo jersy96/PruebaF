@@ -1,6 +1,5 @@
 package gui;
 
-import code.Costumer;
 import code.ManagerCostumer;
 import code.ManagerProduct;
 import code.Product;
@@ -21,7 +20,7 @@ public class BuyTemplate extends javax.swing.JFrame {
         modelAP.addColumn("Codigo");
         modelAP.addColumn("Precio");
         availableProducts.setModel(modelAP);
-        for (Product p : ManagerProduct.getProductsArray()) {
+        for (Product p : ManagerProduct.getList()) {
             modelAP.addRow(new String[]{p.getName(), p.getCode().toString(), "" + p.getPrice()});
         }
         modelC.addColumn("Nombre");

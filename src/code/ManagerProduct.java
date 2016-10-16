@@ -5,28 +5,42 @@ import java.util.HashMap;
 
 public class ManagerProduct {
 
-    private static int editing = -1;
     private static final ArrayList<Product> products = new ArrayList();
     public static final int VALIDATION_SUCCESS = 0;
-    public static final int VALIDATION_ERROR_NAME = 1;
-    public static final int VALIDATION_ERROR_CODE = 2;
+    public static final int VALIDATION_ERROR_NAME_USED = 1;
+    public static final int VALIDATION_ERROR_CODE_USED = 2;
     public static final int VALIDATION_ERROR_CODE_NOT_FOUND = -1;
 
-    public static Product getProductCopy(int i) {
+    private static Product getProductShallowCopy(int i) {
         Product p = products.get(i);
         return new Product(p.getName(), p.getCode(), p.getPrice());
     }
     
+    public static HashMap<String, String> getProductDataInHashMap(Long code){
+        int i = getProductIndex(code);
+        if(i == -1){
+            return null;
+        }else{
+            Product p = getProductShallowCopy(i);
+            HashMap<String, String> data = new HashMap();
+            data.put("name", p.getName());
+            data.put("code", p.getCode().toString());
+            data.put("price", ""+p.getPrice());
+            return data;
+        }
+    }
+    
+
     public static ArrayList<Product> getListOfProductCopy(ArrayList<String> codes) {
         ArrayList<Product> productsCopy = new ArrayList();
-        for(String s : codes){
+        for (String s : codes) {
             Long code = Long.parseLong(s);
             int i = getProductIndex(code);
-            productsCopy.add(getProductCopy(i));
+            productsCopy.add(getProductShallowCopy(i));
         }
         return productsCopy;
     }
-    
+
     public static int getProductIndex(Long code) {
         int i = 0;
         for (Product p : products) {
@@ -42,22 +56,8 @@ public class ManagerProduct {
         return products.size();
     }
 
-    public static ArrayList<String> getList() {
-        ArrayList<String> a = new ArrayList();
-        int i = 1;
-        for (Product p : products) {
-            a.add((i++) + ") nombre: " + p.getName() + ", codigo: " + p.getCode() + ", precio: " + p.getPrice());
-        }
-        if (i == 1) {
-            a.add("Aun no hay productos");
-        }
-        return a;
-    }
-    
-    public static Product[] getProductsArray() {
-        Product[] ret = new Product[products.size()];
-        ret = products.toArray(ret);
-        return ret;
+    public static ArrayList<Product> getList() {
+        return (ArrayList<Product>) products.clone();
     }
 
     public static ArrayList<String> getProductsCheaperThan(int refPrice) {
@@ -73,75 +73,70 @@ public class ManagerProduct {
         }
         return a;
     }
-
-    private static boolean verifyProductName(String name) {
+    
+    private static boolean validateIfNameIsUsed(String name) {
         for (Product p : products) {
-            if (p.getName().equals(name) && (editing >= 0 ? (!products.get(editing).getName().equals(name)) : true)) {
+            if (p.getName().equals(name)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static boolean verifyProductCode(Long code) {
-        for (Product p : products) {
-            if (p.getCode().equals(code) && (editing >= 0 ? (!products.get(editing).getCode().equals(code)) : true)) {
-                return true;
-            }
-        }
-        return false;
+    private static boolean validateIfCodeIsUsed(Long code) {
+        return getProductIndex(code) != -1;
     }
 
-    private static int validateProductData(HashMap<String, String> data) {
-        if (verifyProductName(data.get("name"))) {
-            return VALIDATION_ERROR_NAME;
+    public static int validateProductData(HashMap<String, String> data) {
+        if (validateIfNameIsUsed(data.get("name"))) {
+            return VALIDATION_ERROR_NAME_USED;
         }
-        if (verifyProductCode(Long.parseLong(data.get("code")))) {
-            return VALIDATION_ERROR_CODE;
+        if (validateIfCodeIsUsed(Long.parseLong(data.get("code")))) {
+            return VALIDATION_ERROR_CODE_USED;
+        }
+        return VALIDATION_SUCCESS;
+    }
+    
+    public static int validateProductDataForEdit(Long code, HashMap<String, String> data) {
+        String editingProductName = products.get(getProductIndex(code)).getName();
+        String newName = data.get("name");
+        if (!editingProductName.equals(newName) && validateIfNameIsUsed(newName)) {
+            return VALIDATION_ERROR_NAME_USED;
         }
         return VALIDATION_SUCCESS;
     }
 
-    public static int registerProduct(HashMap<String, String> data) {
-        int aux = validateProductData(data);
-        if (aux == VALIDATION_SUCCESS) {
-            String name = data.get("name");
-            Long code = Long.parseLong(data.get("code"));
-            int price = Integer.parseInt(data.get("price"));
-            products.add(new Product(name, code, price));
-        }
-        return aux;
+    public static void registerProduct(HashMap<String, String> data) {
+        String name = data.get("name");
+        Long code = Long.parseLong(data.get("code"));
+        int price = Integer.parseInt(data.get("price"));
+        products.add(new Product(name, code, price));
     }
 
-    public static int deleteProduct(Long code) {
+    public static void deleteProduct(Long code) {
         int i = getProductIndex(code);
-        int aux;
-        if (i == VALIDATION_ERROR_CODE_NOT_FOUND) {
-            aux = VALIDATION_ERROR_CODE_NOT_FOUND;
-        } else {
-            products.remove(i);
-            aux = VALIDATION_SUCCESS;
-        }
-        return aux;
+        products.remove(i);
     }
 
-    public static int editProduct(Long code, HashMap<String, String> data) {
+    public static void editProduct(Long code, HashMap<String, String> data) {
         int i = getProductIndex(code);
-        if (i == VALIDATION_ERROR_CODE_NOT_FOUND) {
-            return VALIDATION_ERROR_CODE_NOT_FOUND;
-        } 
-        editing = i;
-        int aux = validateProductData(data);
-        if (aux == VALIDATION_SUCCESS) {
-            String name = data.get("name");
-            Long codee = Long.parseLong(data.get("code"));
-            int price = Integer.parseInt(data.get("price"));
-            Product p = products.get(i);
-            p.setName(name);
-            p.setCode(codee);
-            p.setPrice(price);
+        String name = data.get("name");
+        int price = Integer.parseInt(data.get("price"));
+        Product p = products.get(i);
+        p.setName(name);
+        p.setPrice(price);
+    }
+    
+    public static String getErrorDescription(int error){
+        switch(error){
+            case VALIDATION_ERROR_CODE_NOT_FOUND:
+                return "El codigo dado no existe";
+            case VALIDATION_ERROR_CODE_USED:
+                return "El codigo dado ya esta en uso, por favor digite otro";
+            case VALIDATION_ERROR_NAME_USED:
+                return "El nombre dado ya esta en uso";
+            default:
+                return "Error desconocido";
         }
-        editing = -1;
-        return aux;
     }
 }

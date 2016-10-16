@@ -8,7 +8,6 @@ package gui;
 import code.Costumer;
 import code.ManagerCostumer;
 import java.util.ArrayList;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -33,9 +32,6 @@ public class CostumerOptions extends javax.swing.JFrame {
     }
 
     private void setAsActiveWindow() {
-        if (this == null) {
-            System.out.println("esta vaina es null loco");
-        }
         activeWindow = this;
     }
 
@@ -121,6 +117,11 @@ public class CostumerOptions extends javax.swing.JFrame {
         });
 
         btnBack.setText("Volver");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -201,6 +202,12 @@ public class CostumerOptions extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Primero debe seleccionar un cliente de la lista", "", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        MainMenu mm = new MainMenu();
+        mm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;

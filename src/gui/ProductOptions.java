@@ -5,19 +5,45 @@
  */
 package gui;
 
+import code.ManagerProduct;
+import code.Product;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jronc
  */
-public class ProductsOptions extends javax.swing.JFrame {
+public class ProductOptions extends javax.swing.JFrame {
 
-    /**
-     * Creates new form ProductsOptions
-     */
-    public ProductsOptions() {
+    private static ProductOptions activeWindow;
+
+    DefaultTableModel model;
+    
+    public ProductOptions() {
         initComponents();
+        model = (DefaultTableModel) table.getModel();
+        setAsActiveWindow();
+        syncTableData();
     }
 
+    private void setAsActiveWindow() {
+        activeWindow = this;
+    }
+
+    public static void syncTableData() {
+        activeWindow.syncData();
+    }
+
+    private void syncData() {
+        model.setRowCount(0);
+        ArrayList<Product> products = ManagerProduct.getList();
+        for (Product p : products) {
+            model.addRow(new String[]{p.getName(), p.getCode().toString(), ""+p.getPrice()});
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -32,25 +58,42 @@ public class ProductsOptions extends javax.swing.JFrame {
         btnEdit = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnBack.setText("Volver");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnAdd.setText("Agregar Producto");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnEdit.setText("Editar Producto");
+        btnEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Eliminar Producto");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Nombre", "Codigo", "Precio"
@@ -71,7 +114,7 @@ public class ProductsOptions extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(table);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("Listado de productos");
@@ -119,7 +162,46 @@ public class ProductsOptions extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        ProductDataRequest pdr = new ProductDataRequest();
+        pdr.setVisible(true);
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditActionPerformed
+        int[] toEdit = table.getSelectedRows();
+        int tam = toEdit.length;
+        if (tam == 1) {
+            Long code = Long.parseLong((String) table.getValueAt(toEdit[0], 1));
+            ProductDataRequest pdr = new ProductDataRequest(code);
+            pdr.setVisible(true);
+        } else {
+            if (tam == 0) {
+                JOptionPane.showMessageDialog(null, "Primero debe seleccionar un producto de la lista", "", JOptionPane.ERROR_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Seleccione un solo producto que editar", "", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnEditActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        MainMenu mm = new MainMenu();
+        mm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int toDelete = table.getSelectedRow();
+        if (toDelete == -1) {
+            JOptionPane.showMessageDialog(null, "Primero debe seleccionar un producto de la lista", "", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Long code = Long.parseLong((String) table.getValueAt(toDelete, 1));
+            ManagerProduct.deleteProduct(code);
+            model.removeRow(toDelete);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -128,6 +210,6 @@ public class ProductsOptions extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 }
