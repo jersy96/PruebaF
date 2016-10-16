@@ -19,15 +19,17 @@ public class ManagerGeneralValidations {
         if(s == null){
             return null;
         }else{
-            double dob = Double.parseDouble(s);
-            return s;
-//            return ret;
-//            return -1;
-//            try{
-//                
-//            }catch(Exception e){
-//                
-//            }
+            try{
+                double dob = Double.parseDouble(s);
+                return s;
+            }catch(NumberFormatException e){
+                return "NaN";
+            }
         }
+    }
+
+    @Override
+    public String toString() {
+        return "ManagerGeneralValidations{" + '}';
     }
 }

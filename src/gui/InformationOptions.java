@@ -8,10 +8,10 @@ package gui;
 import code.ManagerCostumer;
 import code.ManagerGeneralValidations;
 import code.ManagerProduct;
+import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -19,15 +19,17 @@ import javax.swing.table.DefaultTableModel;
  * @author jronc
  */
 public class InformationOptions extends javax.swing.JFrame {
-    
+
     private static final int COMPETITORS = 0;
-    private static final int COSTUMERS_SPENDED_MORE_THAN= 1;
-    private static final int TOTAL_INCOMES= 2;
-    private static final int PRODUCTS_CHEAPER_THAN= 3;
+    private static final int COSTUMERS_SPENDED_MORE_THAN = 1;
+    private static final int TOTAL_INCOMES = 2;
+    private static final int PRODUCTS_CHEAPER_THAN = 3;
     private static final int DEFAULT = COMPETITORS;
-    
+
     public InformationOptions() {
         initComponents();
+        this.setResizable(false);
+        options.setModel(new javax.swing.DefaultComboBoxModel(new String[]{"Clientes seleccionados para participar por premios", "Clientes cuyo valor total en compras sea mayor a...", "Dinero total producido por ventas", "Productos con precio menor a..."}));
         getDataForTable(DEFAULT);
     }
 
@@ -44,14 +46,14 @@ public class InformationOptions extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         table = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         options.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        options.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                optionsActionPerformed(evt);
+        options.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                optionsItemStateChanged(evt);
             }
         });
 
@@ -76,10 +78,10 @@ public class InformationOptions extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         jLabel1.setText("Digite una opcion para visualizar:");
 
-        jButton1.setText("Actualizar Tabla");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setText("Volver");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
 
@@ -91,25 +93,25 @@ public class InformationOptions extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(options, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButton1))
+                            .addComponent(options, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(btnBack))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(options, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 315, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
+                .addGap(21, 21, 21)
+                .addComponent(btnBack)
                 .addContainerGap())
         );
 
@@ -117,16 +119,20 @@ public class InformationOptions extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void optionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_optionsActionPerformed
-        
-    }//GEN-LAST:event_optionsActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        OfficesOptions oo = new OfficesOptions();
+        oo.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnBackActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        getDataForTable(options.getSelectedIndex());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void optionsItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_optionsItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED) {
+            getDataForTable(options.getSelectedIndex());
+        }
+    }//GEN-LAST:event_optionsItemStateChanged
 
     private void getDataForTable(int newOp) {
-        ArrayList<HashMap<String ,String>> data;
+        ArrayList<HashMap<String, String>> data;
         String s;
         data = new ArrayList();
         switch (newOp) {
@@ -134,10 +140,10 @@ public class InformationOptions extends javax.swing.JFrame {
                 data = ManagerCostumer.getCompetitors();
                 break;
             case COSTUMERS_SPENDED_MORE_THAN:
-                do{
+                do {
                     s = ManagerGeneralValidations.askNumber("Digite un valor:");
-                }while(s != null && s.equals("NaN"));
-                if(s != null){
+                } while (s != null && s.equals("NaN"));
+                if (s != null) {
                     data = ManagerCostumer.getCostumersSpendMoreThan(Integer.parseInt(s));
                 }
                 break;
@@ -145,10 +151,11 @@ public class InformationOptions extends javax.swing.JFrame {
                 data = ManagerCostumer.getTotalSales();
                 break;
             case PRODUCTS_CHEAPER_THAN:
-                do{
+                do {
                     s = ManagerGeneralValidations.askNumber("Digite un valor:");
-                }while(s != null && s.equals("NaN"));
-                if(s != null){
+                } while (s != null && s.equals("NaN"));
+                if (s != null) {
+                    System.out.println(Integer.parseInt(s));
                     data = ManagerProduct.getProductsCheaperThan(Integer.parseInt(s));
                 }
                 break;
@@ -158,22 +165,25 @@ public class InformationOptions extends javax.swing.JFrame {
 
     private void syncTable(ArrayList<HashMap<String, String>> data) {
         DefaultTableModel newModel = new DefaultTableModel();
-        if(data.size() > 0){
+        if (data.size() > 0) {
             Set<String> set = data.get(0).keySet();
             for (String s : set) {
                 newModel.addColumn(s);
             }
             for (HashMap<String, String> hm : data) {
-                String[] sa = (String[])hm.values().toArray();
-                ESTE ES EL CASTING QUE NECESITO
+                String[] sa = (String[]) hm.values().toArray(new String[hm.size()]);
+//                ESTE ES EL CASTING QUE NECESITO
                 newModel.addRow(sa);
             }
-            table.setModel(newModel);
+        } else {
+            newModel.addColumn("");
+            newModel.addRow(new String[]{"Aun no hay datos"});
         }
+        table.setModel(newModel);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnBack;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox options;

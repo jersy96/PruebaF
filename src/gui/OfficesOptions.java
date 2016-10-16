@@ -63,6 +63,11 @@ public class OfficesOptions extends javax.swing.JFrame {
         });
 
         btnCancel.setText("Volver");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -124,6 +129,12 @@ public class OfficesOptions extends javax.swing.JFrame {
         io.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnInformationActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        MainMenu mm = new MainMenu();
+        mm.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnCancelActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

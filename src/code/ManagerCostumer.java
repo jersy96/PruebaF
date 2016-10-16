@@ -88,6 +88,7 @@ public class ManagerCostumer {
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", c.getName());
                 hm.put("Cedula", c.getID().toString());
+                hm.put("Puntos",""+c.getPoints());
                 a.add(hm);
             }
         }
@@ -103,6 +104,7 @@ public class ManagerCostumer {
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", c.getName());
                 hm.put("Cedula", c.getID().toString());
+                hm.put("Total Compras", c.getTotalSpended()+"");
                 a.add(hm);
             }
         }
@@ -139,8 +141,8 @@ public class ManagerCostumer {
 
     public static void deleteCostumer(Long id) {
         int i = getCostumerIndex(id);
-        costumers.remove(i);
         earnedByDeletedCostumers += costumers.get(i).getTotalSpended();
+        costumers.remove(i);
     }
 
     public static void editCostumer(Long id, HashMap<String, String> data) {

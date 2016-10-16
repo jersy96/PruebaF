@@ -28,13 +28,13 @@ public class CostumerDataRequest extends javax.swing.JFrame {
         initComponents();
         location = op;
     }
-    
-    public CostumerDataRequest(int op, Long id){
+
+    public CostumerDataRequest(int op, Long id) {
         initComponents();
         location = OFFICES_AND_EDITING;
         idOfCostumerToEdit = id;
         BtnRegisterEdit.setText("Editar");
-        HashMap<String, String> currentDataOfCostumerToEdit =  ManagerCostumer.getCostumerDataInHashMap(idOfCostumerToEdit);
+        HashMap<String, String> currentDataOfCostumerToEdit = ManagerCostumer.getCostumerDataInHashMap(idOfCostumerToEdit);
         txtFldName.setText(currentDataOfCostumerToEdit.get("name"));
         txtFldName.selectAll();
         txtFldId.setText(currentDataOfCostumerToEdit.get("id"));
@@ -170,6 +170,10 @@ public class CostumerDataRequest extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BtnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCancelActionPerformed
+        if (location == STORE) {
+            MainMenu mm = new MainMenu();
+            mm.setVisible(true);
+        }
         dispose();
     }//GEN-LAST:event_BtnCancelActionPerformed
 
@@ -188,6 +192,9 @@ public class CostumerDataRequest extends javax.swing.JFrame {
                 if (aux == 0) {
                     BuyTemplate bt = new BuyTemplate(Long.parseLong(data.get("id")));
                     bt.setVisible(true);
+                } else {
+                    MainMenu mm = new MainMenu();
+                    mm.setVisible(true);
                 }
             } else {
                 if (location == OFFICES_AND_EDITING) {

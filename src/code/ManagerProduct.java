@@ -69,7 +69,7 @@ public class ManagerProduct {
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", p.getName());
                 hm.put("Codigo", p.getCode().toString());
-                hm.put("Total Gastado", ""+p.getPrice());
+                hm.put("Precio", ""+p.getPrice());
                 a.add(hm);
             }
         }
