@@ -106,7 +106,7 @@ public class MainMenu extends javax.swing.JFrame {
             Long id = Long.parseLong(str);
             if (ManagerCostumer.validateIfIdIsUsed(id)) {
                 BuyTemplate bt;
-                bt = new BuyTemplate(id);
+                bt = new BuyTemplate(id, true);
                 bt.setVisible(true);
                 dispose();
             } else {

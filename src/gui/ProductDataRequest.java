@@ -160,7 +160,7 @@ public class ProductDataRequest extends javax.swing.JFrame {
             } else {
                 ManagerProduct.registerProduct(data);
             }
-            ProductOptions.syncTableData();
+            ProductsOptions.syncTableData();
             dispose();
         } else {
             JOptionPane.showMessageDialog(null, ManagerProduct.getErrorDescription(ans), "", JOptionPane.ERROR_MESSAGE);

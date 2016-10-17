@@ -15,13 +15,13 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jronc
  */
-public class ProductOptions extends javax.swing.JFrame {
+public class ProductsOptions extends javax.swing.JFrame {
 
-    private static ProductOptions activeWindow;
+    private static ProductsOptions activeWindow;
 
     DefaultTableModel model;
     
-    public ProductOptions() {
+    public ProductsOptions() {
         initComponents();
         model = (DefaultTableModel) table.getModel();
         setAsActiveWindow();

@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/code/ManagerGeneralValidations.java</file>
-            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/gui/InformationOptions.java</file>
-            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/code/Main.java</file>
-            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/code/ManagerProduct.java</file>
+            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/gui/BillsOptions.java</file>
+            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/gui/CostumerDataRequest.java</file>
             <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/code/ManagerCostumer.java</file>
-            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/gui/OfficesOptions.java</file>
+            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/code/ManagerBill.java</file>
+            <file>file:/C:/Users/jronc/Documents/programacion/PruebaF/src/gui/BuyTemplate.java</file>
         </group>
     </open-files>
 </project-private>

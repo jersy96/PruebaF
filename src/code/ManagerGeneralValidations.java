@@ -14,18 +14,19 @@ import javax.swing.JOptionPane;
 public class ManagerGeneralValidations {
     
     public static String askNumber(String msg) {
-        String s;
-        s = JOptionPane.showInputDialog(null, msg, "",JOptionPane.PLAIN_MESSAGE);
-        if(s == null){
-            return null;
-        }else{
-            try{
-                double dob = Double.parseDouble(s);
-                return s;
-            }catch(NumberFormatException e){
-                return "NaN";
+        String ret;
+        do {
+            ret = JOptionPane.showInputDialog(null, msg, "",JOptionPane.PLAIN_MESSAGE);
+            if(ret != null){
+                try{
+                    Double.parseDouble(ret);
+                }catch(NumberFormatException e){
+                    JOptionPane.showMessageDialog(null, "Debe digitar un numero", "", JOptionPane.ERROR_MESSAGE);
+                    ret = "NaN";
+                }
             }
-        }
+        } while (ret != null && ret.equals("NaN"));
+        return ret;
     }
 
     @Override

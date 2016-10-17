@@ -1,8 +1,12 @@
 package code;
 
 //import java.io.BufferedReader;
-
 import gui.MainMenu;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 //import java.io.IOException;
 //import java.io.InputStreamReader;
@@ -12,6 +16,7 @@ import gui.MainMenu;
 //import java.util.logging.Level;
 //import java.util.logging.Logger;
 public class Main {
+
     public static void main(String[] args) {
         MainMenu m = new MainMenu();
         m.setVisible(true);
@@ -247,4 +252,33 @@ public class Main {
 //        data.put("price", ""+price);
 //        return data;
 //    }
+
+    public static void refreshTable(JTable table, ArrayList<HashMap<String, String>> data) {
+        if(data.size() > 0){
+            DefaultTableModel newModel = new DefaultTableModel() {
+    //            Class[] types = new Class[]{
+    //                java.lang.Object.class, java.lang.Object.class, java.lang.String.class
+    //            };
+    //            boolean[] canEdit = new boolean[]{
+    //                false, false, true
+    //            };
+
+    //            public Class getColumnClass(int columnIndex) {
+    //                return types[columnIndex];
+    //            }
+                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                    return false;
+                }
+            };
+            Set<String> set = data.get(0).keySet();
+            for (String s : set) {
+                newModel.addColumn(s);
+            }
+            for (HashMap<String, String> hm : data) {
+                String[] sa = (String[]) hm.values().toArray(new String[hm.size()]);
+                newModel.addRow(sa);
+            }
+            table.setModel(newModel);
+        }
+    }
 }

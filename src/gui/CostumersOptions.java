@@ -15,16 +15,16 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jronc
  */
-public class CostumerOptions extends javax.swing.JFrame {
+public class CostumersOptions extends javax.swing.JFrame {
 
     /**
-     * Creates new form CostumerOptions
+     * Creates new form CostumersOptions
      */
-    private static CostumerOptions activeWindow;
+    private static CostumersOptions activeWindow;
 
     DefaultTableModel model;
 
-    public CostumerOptions() {
+    public CostumersOptions() {
         initComponents();
         model = (DefaultTableModel) table.getModel();
         setAsActiveWindow();
@@ -43,7 +43,6 @@ public class CostumerOptions extends javax.swing.JFrame {
         model.setRowCount(0);
         ArrayList<Costumer> costumers = ManagerCostumer.getList();
         for (Costumer c : costumers) {
-            System.out.println(c.getName());
             model.addRow(new String[]{c.getName(), c.getID().toString(), c.getAddress(), c.getMail(), c.getPhone().toString()});
         }
     }

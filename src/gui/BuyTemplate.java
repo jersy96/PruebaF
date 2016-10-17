@@ -10,22 +10,31 @@ import javax.swing.table.DefaultTableModel;
 
 public class BuyTemplate extends javax.swing.JFrame {
 
-    DefaultTableModel modelAP = new DefaultTableModel();
-    DefaultTableModel modelC = new DefaultTableModel();
-    Long costumerId;
-    int totalValue;
-    String labelTotalValueMsg;
-    String labelWelcomeMsg;
-
-    public BuyTemplate(Long id) {
+    private boolean onStore;
+    private int totalValue;
+    private final Long costumerId;
+//    private final int location;
+    private final String labelTotalValueMsg;
+    private final String labelWelcomeMsg;
+    private final DefaultTableModel modelAP = new DefaultTableModel();
+    private final DefaultTableModel modelC = new DefaultTableModel();
+//    public final int STORE;
+//    public final int 
+    
+    public BuyTemplate(Long id, boolean onStore) {
         initComponents();
+        this.onStore = onStore;
         this.totalValue = 0;
+        costumerId = id;
         labelTotalValueMsg = "Total: ";
         labelWelcomeMsg = "Bienvenido ";
-        labelTotalValue.setText(labelTotalValueMsg + totalValue);
-        costumerId = id;
-        HashMap<String, String> data = ManagerCostumer.getCostumerDataInHashMap(id);
-        labelWelcome.setText(labelWelcomeMsg + data.get("name"));
+        String s = "";
+        if(onStore){
+            labelTotalValue.setText(labelTotalValueMsg + totalValue);
+            HashMap<String, String> data = ManagerCostumer.getCostumerDataInHashMap(id);
+            s = labelWelcomeMsg + data.get("name");
+        }
+        labelWelcome.setText(s);
         modelAP.addColumn("Nombre");
         modelAP.addColumn("Codigo");
         modelAP.addColumn("Precio");
@@ -94,7 +103,7 @@ public class BuyTemplate extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, true
@@ -237,9 +246,7 @@ public class BuyTemplate extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveFromCartActionPerformed
 
     private void btnCancelBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelBuyActionPerformed
-        MainMenu mm = new MainMenu();
-        mm.setVisible(true);
-        dispose();
+        backAction();
     }//GEN-LAST:event_btnCancelBuyActionPerformed
 
     private void btnBuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuyActionPerformed
@@ -250,18 +257,27 @@ public class BuyTemplate extends javax.swing.JFrame {
         }
         ArrayList<Product> products;
         products = ManagerProduct.getListOfProductCopy(codes);
-
         int aux = ManagerCostumer.validateAndExecuteBuy(costumerId, products);
         if (aux == ManagerCostumer.VALIDATION_SUCCESS) {
             JOptionPane.showMessageDialog(null, "Compra exitosa", "", JOptionPane.INFORMATION_MESSAGE);
-            MainMenu mm = new MainMenu();
-            mm.setVisible(true);
-            dispose();
+            backAction();
         } else {
             JOptionPane.showMessageDialog(null, ManagerCostumer.getErrorDescription(aux), "", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnBuyActionPerformed
-
+    
+    private void backAction(){
+        if(onStore){
+            MainMenu mm = new MainMenu();
+            mm.setVisible(true);
+            dispose();
+        }else{
+            BillsOptions bo = new BillsOptions();
+            bo.setVisible(true);
+            dispose();
+        }
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable availableProducts;
     private javax.swing.JButton btnAddToCart;

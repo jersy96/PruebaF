@@ -190,7 +190,7 @@ public class CostumerDataRequest extends javax.swing.JFrame {
                 ManagerCostumer.registerCostumer(data);
                 int aux = JOptionPane.showConfirmDialog(null, "Usuario Creado Exitosamente, Desea Continuar Con La Compra?", "", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (aux == 0) {
-                    BuyTemplate bt = new BuyTemplate(Long.parseLong(data.get("id")));
+                    BuyTemplate bt = new BuyTemplate(Long.parseLong(data.get("id")), true);
                     bt.setVisible(true);
                 } else {
                     MainMenu mm = new MainMenu();
@@ -202,7 +202,7 @@ public class CostumerDataRequest extends javax.swing.JFrame {
                 } else {
                     ManagerCostumer.registerCostumer(data);
                 }
-                CostumerOptions.syncTableData();
+                CostumersOptions.syncTableData();
             }
             dispose();
         } else {

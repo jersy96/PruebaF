@@ -81,10 +81,11 @@ public class ManagerCostumer {
 
     public static ArrayList<HashMap<String, String>> getCompetitors() {
         ArrayList<HashMap<String, String>> a = new ArrayList();
+        HashMap<String, String> hm;
         int i = 1;
         for (Costumer c : costumers) {
             if (c.getPoints() > POINTS_TO_BE_COMPETITOR) {
-                HashMap<String, String> hm = new HashMap();
+                hm = new HashMap();
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", c.getName());
                 hm.put("Cedula", c.getID().toString());
@@ -92,21 +93,32 @@ public class ManagerCostumer {
                 a.add(hm);
             }
         }
+        if(i == 1){
+            hm = new HashMap();
+            hm.put("", "Aun no hay clientes seleccionables para participar");
+            a.add(hm);
+        }
         return a;
     }
 
     public static ArrayList<HashMap<String, String>> getCostumersSpendMoreThan(int value) {
         ArrayList<HashMap<String, String>> a = new ArrayList();
+        HashMap<String, String> hm;
         int i = 1;
         for (Costumer c : costumers) {
             if (c.getTotalSpended() > value) {
-                HashMap<String, String> hm = new HashMap();
+                hm = new HashMap();
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", c.getName());
                 hm.put("Cedula", c.getID().toString());
                 hm.put("Total Compras", c.getTotalSpended()+"");
                 a.add(hm);
             }
+        }
+        if(i == 1){
+            hm = new HashMap();
+            hm.put("", "Aun no hay clientes que hayan gastado mas de $"+value);
+            a.add(hm);
         }
         return a;
     }

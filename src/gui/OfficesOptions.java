@@ -54,6 +54,11 @@ public class OfficesOptions extends javax.swing.JFrame {
         });
 
         btnFacturas.setText("Facturas");
+        btnFacturas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnFacturasActionPerformed(evt);
+            }
+        });
 
         btnInformation.setText("Informacion");
         btnInformation.addActionListener(new java.awt.event.ActionListener() {
@@ -113,13 +118,13 @@ public class OfficesOptions extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCostumersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCostumersActionPerformed
-        CostumerOptions co = new CostumerOptions();
+        CostumersOptions co = new CostumersOptions();
         co.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCostumersActionPerformed
 
     private void btnProductsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductsActionPerformed
-        ProductOptions pos = new ProductOptions();
+        ProductsOptions pos = new ProductsOptions();
         pos.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnProductsActionPerformed
@@ -135,6 +140,12 @@ public class OfficesOptions extends javax.swing.JFrame {
         mm.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnFacturasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturasActionPerformed
+        BillsOptions bo = new BillsOptions();
+        bo.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_btnFacturasActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;

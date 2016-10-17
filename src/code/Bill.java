@@ -61,13 +61,8 @@ public class Bill {
         }
         this.costumer.changeTotalSpended(totalValue);
     }
-    public String getProducts(){
-        String ret = "{";
-        for(Product p : products){
-            ret += p.getName()+",";
-        }
-        ret += "\b}";
-        return ret;
+    public ArrayList<Product> getProducts(){
+        return (ArrayList<Product>)this.products.clone();
     }
     public void clearProducts(){
         this.products.clear();

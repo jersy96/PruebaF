@@ -62,16 +62,22 @@ public class ManagerProduct {
 
     public static ArrayList<HashMap<String, String>> getProductsCheaperThan(int refPrice) {
         ArrayList<HashMap<String, String>> a = new ArrayList();
+        HashMap<String, String> hm;
         int i = 1;
         for (Product p : products) {
             if (p.getPrice() < refPrice) {
-                HashMap<String, String> hm = new HashMap();
+                hm = new HashMap();
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", p.getName());
                 hm.put("Codigo", p.getCode().toString());
                 hm.put("Precio", ""+p.getPrice());
                 a.add(hm);
             }
+        }
+        if(i == 1){
+            hm = new HashMap();
+            hm.put("", "No Existen Productos con un precio menor a $"+refPrice);
+            a.add(hm);
         }
         return a;
     }
