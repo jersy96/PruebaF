@@ -2,6 +2,7 @@ package code;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ManagerCostumer {
 
@@ -12,7 +13,6 @@ public class ManagerCostumer {
     public static final int VALIDATION_ERROR_NAME = 1;
     public static final int VALIDATION_ERROR_ID_USED = 2;
     public static final int VALIDATION_ERROR_PHONE = 3;
-    public static final int VALIDATION_ERROR_EMPTY_CART = 4;
     public static final int VALIDATION_ERROR_ID_NOT_FOUND = -1;
 
     public static HashMap<String, String> getCostumerDataInHashMap(Long id) {
@@ -79,13 +79,13 @@ public class ManagerCostumer {
         return (ArrayList<Costumer>) costumers.clone();
     }
 
-    public static ArrayList<HashMap<String, String>> getCompetitors() {
-        ArrayList<HashMap<String, String>> a = new ArrayList();
-        HashMap<String, String> hm;
+    public static ArrayList<LinkedHashMap<String, String>> getCompetitors() {
+        ArrayList<LinkedHashMap<String, String>> a = new ArrayList();
+        LinkedHashMap<String, String> hm;
         int i = 1;
         for (Costumer c : costumers) {
             if (c.getPoints() > POINTS_TO_BE_COMPETITOR) {
-                hm = new HashMap();
+                hm = new LinkedHashMap();
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", c.getName());
                 hm.put("Cedula", c.getID().toString());
@@ -93,21 +93,16 @@ public class ManagerCostumer {
                 a.add(hm);
             }
         }
-        if(i == 1){
-            hm = new HashMap();
-            hm.put("", "Aun no hay clientes seleccionables para participar");
-            a.add(hm);
-        }
         return a;
     }
 
-    public static ArrayList<HashMap<String, String>> getCostumersSpendMoreThan(int value) {
-        ArrayList<HashMap<String, String>> a = new ArrayList();
-        HashMap<String, String> hm;
+    public static ArrayList<LinkedHashMap<String, String>> getCostumersSpendMoreThan(int value) {
+        ArrayList<LinkedHashMap<String, String>> a = new ArrayList();
+        LinkedHashMap<String, String> hm;
         int i = 1;
         for (Costumer c : costumers) {
             if (c.getTotalSpended() > value) {
-                hm = new HashMap();
+                hm = new LinkedHashMap();
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", c.getName());
                 hm.put("Cedula", c.getID().toString());
@@ -115,20 +110,15 @@ public class ManagerCostumer {
                 a.add(hm);
             }
         }
-        if(i == 1){
-            hm = new HashMap();
-            hm.put("", "Aun no hay clientes que hayan gastado mas de $"+value);
-            a.add(hm);
-        }
         return a;
     }
 
-    public static ArrayList<HashMap<String, String>> getTotalSales() {
-        ArrayList<HashMap<String, String>> a = new ArrayList();
+    public static ArrayList<LinkedHashMap<String, String>> getTotalSales() {
+        ArrayList<LinkedHashMap<String, String>> a = new ArrayList();
         int suma = earnedByDeletedCostumers;
         int i = 1;
         for (Costumer c : costumers) {
-            HashMap<String, String> hm = new HashMap();
+            LinkedHashMap<String, String> hm = new LinkedHashMap();
             hm.put("Numero", ""+(i++));
             hm.put("Nombre", c.getName());
             hm.put("Cedula", c.getID().toString());
@@ -136,13 +126,13 @@ public class ManagerCostumer {
             a.add(hm);
             suma += c.getTotalSpended();
         }
-        HashMap<String, String> hm = new HashMap();
+        LinkedHashMap<String, String> hm = new LinkedHashMap();
         hm.put("Numero", "");
         hm.put("Nombre", "Eliminados");
         hm.put("Cedula", "");
         hm.put("Total Gastado", ""+earnedByDeletedCostumers);
         a.add(hm);
-        hm = new HashMap();
+        hm = new LinkedHashMap();
         hm.put("Numero", "");
         hm.put("Nombre", "Total");
         hm.put("Cedula", "");
@@ -166,12 +156,8 @@ public class ManagerCostumer {
         c.setPhone(Long.parseLong(data.get("phone")));
     }
 
-    public static int validateAndExecuteBuy(Long id, ArrayList<Product> products) {
-        if(products.size() > 0){
-            getCostumerDeepCopy(id).buy(products);
-            return VALIDATION_SUCCESS;
-        }
-        return VALIDATION_ERROR_EMPTY_CART;
+    public static void letBuy(Long id, ArrayList<Product> products) {
+        getCostumerDeepCopy(id).buy(products);
     }
 
     public static String getErrorDescription(int error) {
@@ -184,8 +170,6 @@ public class ManagerCostumer {
                 return "El celular debe tener exactamente 10 numeros";
             case VALIDATION_ERROR_ID_NOT_FOUND:
                 return "Esta cedula no existe en nuestra base de datos";
-            case VALIDATION_ERROR_EMPTY_CART:
-                return "El carrito no puede estar vacio";
             default:
                 return "Error desconocido";
         }

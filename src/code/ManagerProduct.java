@@ -2,6 +2,7 @@ package code;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class ManagerProduct {
 
@@ -30,13 +31,14 @@ public class ManagerProduct {
         }
     }
     
-
     public static ArrayList<Product> getListOfProductCopy(ArrayList<String> codes) {
         ArrayList<Product> productsCopy = new ArrayList();
         for (String s : codes) {
             Long code = Long.parseLong(s);
             int i = getProductIndex(code);
-            productsCopy.add(getProductShallowCopy(i));
+            if(i != -1){//puede mejorarse, esto se hace porque si por algun motivo se borra un producto no genere un error a la hora de editar una factura donde hay un producto eliminado
+                productsCopy.add(getProductShallowCopy(i));
+            }
         }
         return productsCopy;
     }
@@ -56,28 +58,33 @@ public class ManagerProduct {
         return products.size();
     }
 
-    public static ArrayList<Product> getList() {
-        return (ArrayList<Product>) products.clone();
+    public static ArrayList<LinkedHashMap<String,String>> getList() {
+        ArrayList<LinkedHashMap<String, String>> a = new ArrayList();
+        LinkedHashMap<String, String> hm;
+        int i = 1;
+        for (Product p : products) {
+            hm = new LinkedHashMap();
+            hm.put("Nombre", p.getName());
+            hm.put("Codigo", p.getCode().toString());
+            hm.put("Precio", ""+p.getPrice());
+            a.add(hm);
+        }
+        return a;
     }
 
-    public static ArrayList<HashMap<String, String>> getProductsCheaperThan(int refPrice) {
-        ArrayList<HashMap<String, String>> a = new ArrayList();
-        HashMap<String, String> hm;
+    public static ArrayList<LinkedHashMap<String, String>> getProductsCheaperThan(int refPrice) {
+        ArrayList<LinkedHashMap<String, String>> a = new ArrayList();
+        LinkedHashMap<String, String> hm;
         int i = 1;
         for (Product p : products) {
             if (p.getPrice() < refPrice) {
-                hm = new HashMap();
+                hm = new LinkedHashMap();
                 hm.put("Numero", ""+(i++));
                 hm.put("Nombre", p.getName());
                 hm.put("Codigo", p.getCode().toString());
                 hm.put("Precio", ""+p.getPrice());
                 a.add(hm);
             }
-        }
-        if(i == 1){
-            hm = new HashMap();
-            hm.put("", "No Existen Productos con un precio menor a $"+refPrice);
-            a.add(hm);
         }
         return a;
     }

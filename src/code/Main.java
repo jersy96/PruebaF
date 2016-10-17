@@ -4,6 +4,7 @@ package code;
 import gui.MainMenu;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -253,7 +254,7 @@ public class Main {
 //        return data;
 //    }
 
-    public static void refreshTable(JTable table, ArrayList<HashMap<String, String>> data) {
+    public static void refreshTable(JTable table, ArrayList<LinkedHashMap<String, String>> data) {
         if(data.size() > 0){
             DefaultTableModel newModel = new DefaultTableModel() {
     //            Class[] types = new Class[]{
@@ -266,6 +267,7 @@ public class Main {
     //            public Class getColumnClass(int columnIndex) {
     //                return types[columnIndex];
     //            }
+                @Override
                 public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return false;
                 }

@@ -8,6 +8,7 @@ import code.ManagerProduct;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class InformationOptions extends javax.swing.JFrame {
 
@@ -141,7 +142,7 @@ public class InformationOptions extends javax.swing.JFrame {
     }//GEN-LAST:event_optionsItemStateChanged
 
     private void getDataForTable(int newOp) {
-        ArrayList<HashMap<String, String>> data;
+        ArrayList<LinkedHashMap<String, String>> data;
         String s;
         data = new ArrayList();
         switch (newOp) {

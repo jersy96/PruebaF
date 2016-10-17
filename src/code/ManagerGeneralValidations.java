@@ -6,6 +6,7 @@
 package code;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -29,8 +30,7 @@ public class ManagerGeneralValidations {
         return ret;
     }
 
-    @Override
-    public String toString() {
-        return "ManagerGeneralValidations{" + '}';
+    public static boolean validateIfTableIsNotEmpty(JTable table){
+        return table.getRowCount() > 0;
     }
 }

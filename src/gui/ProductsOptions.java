@@ -5,6 +5,7 @@
  */
 package gui;
 
+import code.Main;
 import code.ManagerProduct;
 import code.Product;
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ public class ProductsOptions extends javax.swing.JFrame {
     
     public ProductsOptions() {
         initComponents();
-        model = (DefaultTableModel) table.getModel();
         setAsActiveWindow();
         syncTableData();
     }
@@ -31,17 +31,14 @@ public class ProductsOptions extends javax.swing.JFrame {
     private void setAsActiveWindow() {
         activeWindow = this;
     }
-
+    
     public static void syncTableData() {
         activeWindow.syncData();
     }
 
     private void syncData() {
-        model.setRowCount(0);
-        ArrayList<Product> products = ManagerProduct.getList();
-        for (Product p : products) {
-            model.addRow(new String[]{p.getName(), p.getCode().toString(), ""+p.getPrice()});
-        }
+        Main.refreshTable(table, ManagerProduct.getList());
+        model = (DefaultTableModel)table.getModel();
     }
     
     /**
@@ -187,8 +184,8 @@ public class ProductsOptions extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        MainMenu mm = new MainMenu();
-        mm.setVisible(true);
+        OfficesOptions oo = new OfficesOptions();
+        oo.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 

@@ -203,8 +203,8 @@ public class CostumersOptions extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
-        MainMenu mm = new MainMenu();
-        mm.setVisible(true);
+        OfficesOptions oo = new OfficesOptions();
+        oo.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnBackActionPerformed
 
